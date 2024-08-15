@@ -1,0 +1,11 @@
+{{/* https://github.com/CMBill/lxgw-wenkai-web */}}
+{{ $useAliyunMirror := true }}
+{{ if $useAliyunMirror }}
+<link rel="stylesheet" href="https://registry.npmmirror.com/lxgw-wenkai-web/latest/files/style.css" />
+<link rel="stylesheet" href="https://registry.npmmirror.com/lxgw-wenkai-mono-web/latest/files/style.css" />
+<link rel="stylesheet" href="https://registry.npmmirror.com/lxgw-wenkai-web-screen/latest/files/style.css" />
+{{ else }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web-screen@latest/style.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-mono-web@latest/style.css" />
+{{ end }}
