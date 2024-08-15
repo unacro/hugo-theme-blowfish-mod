@@ -1,3 +1,3 @@
-module github.com/unacro/hugo-theme-blowfish-mod v0.1.1
+module github.com/unacro/hugo-theme-blowfish-mod
 
 go 1.23.0
