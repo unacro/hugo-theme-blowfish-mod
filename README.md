@@ -1,6 +1,6 @@
 # Blowfish Mod
 
-Personal preferences for modifications to the [Hugo](https://github.com/gohugoio/hugo) theme [Blowfish](https://github.com/nunocoracao/blowfish).
+Personal modifications to the [Hugo](https://github.com/gohugoio/hugo) theme [Blowfish](https://github.com/nunocoracao/blowfish).
 
 ## Usage
 
