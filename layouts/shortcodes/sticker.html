@@ -1,0 +1,2 @@
+{{- $height := .Get 2 | default `2rem` -}}
+<img class="inline m-1 align-text-bottom" style="height:{{- $height -}};" src="{{- .Get 0 -}}" alt="{{- .Get 1 -}}">
