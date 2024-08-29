@@ -10,4 +10,4 @@ workspace = 'off'
 [module.hugoVersion]
 extended = false
 min = '0.126.0'
-max = '0.133.0'
+max = '0.133.1'
