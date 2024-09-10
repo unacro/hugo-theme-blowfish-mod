@@ -1,0 +1,50 @@
+{{/* 默认使用本地数据 (data 目录下的静态文件) */}}
+{{- $gameDatabase := index (index $.Site.Data.games "slay-the-spire") "cards" -}}
+
+{{/* 尝试查询云端数据库并优先应用 */}}
+{{- with getenv "HUGO_NOCODB_TOKEN" -}}
+	{{- $baseUrl := "https://app.nocodb.com/" -}}
+	{{- $tableId := "mcaapqi9bm7v2sg" -}}
+	{{- $url := add $tableId "/records" | add "/api/v2/tables/" | add (strings.TrimRight "/" $baseUrl) -}}
+	{{- $opts := dict "headers" (dict "xc-token" .) -}}
+	{{- with resources.GetRemote $url $opts -}}
+		{{- with .Err -}}
+			{{- warnf "%s" . -}}
+		{{- else -}}
+			{{- if and (eq .Data.StatusCode 200) (strings.Contains (lower .Data.ContentType) "application/json") -}}
+				{{- $responseData := . | transform.Unmarshal -}}
+				{{- $gameDatabase = index $responseData "list" -}}
+			{{- else -}}
+				{{- warnf "%s" . -}}
+			{{- end -}}
+		{{- end -}}
+	{{- else -}}
+		{{- errorf "Unable to get remote resource %q" $url -}}
+	{{- end -}}
+{{- end -}}
+
+{{/* 正常业务逻辑 */}}
+{{- $targetCard := .Get 0 -}}
+{{/*- debug.Dump $gameDatabase -*/}}
+{{- $queryResult := where $gameDatabase "name" "eq" $targetCard -}}
+{{- if eq (len $queryResult) 1 -}}
+	{{- $cardData := index $queryResult 0 -}}
+
+	{{- $cardCost := index $cardData "cost" | string -}}
+	{{- if eq $cardCost "-10" -}}
+		{{- $cardCost = "X" -}}
+	{{- else if ne (index $cardData "cost") (index $cardData "upgraded_cost") -}}
+		{{- $cardCost = add (index $cardData "upgraded_cost" | string) ")+" | add "(" | add $cardCost -}}
+	{{- end -}}
+
+	{{- $typeTextMap := dict "attack" "攻击" "skill" "技能" "power" "能力" "status" "状态" "curse" "诅咒" -}}
+	{{- $cardType := index $typeTextMap (lower (index $cardData `type`)) | default "未知类型" -}}
+
+	{{- $rarityColorMap := dict "common" "#c8c6c4" "uncommon" "#00bcf2" "rare" "#ffb900" -}}
+	{{- $cardColor := index $rarityColorMap (lower (index $cardData `rarity`)) | default "#cbd5e1" -}}
+
+	<u title="{{- $cardCost }} 费{{- $cardType -}}牌：{{- index $cardData `effect` -}}"
+		style="color:{{- $cardColor -}};"><i>{{- index $cardData `name` -}}</i></u>
+{{- else -}}
+	<mark>查询《杀戮尖塔》卡牌「{{- $targetCard -}}」数据时发生错误</mark>
+{{- end -}}

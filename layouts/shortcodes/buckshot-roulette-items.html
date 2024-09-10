@@ -1,0 +1,10 @@
+{{- $gameDatabase := index .Site.Data.games "buckshot-roulette" -}}
+{{- $queryResult := where (index $gameDatabase "items") "mode" "ne" "multiplayer" -}}
+{{/*- debug.Dump $queryResult -*/}}
+{{- if gt (len $queryResult) 0 -}}
+	<ul>
+		{{- range $queryResult -}}
+			<li>{{- .name -}}：{{- .effect -}}</li>
+		{{- end -}}
+	</ul>
+{{- end -}}
