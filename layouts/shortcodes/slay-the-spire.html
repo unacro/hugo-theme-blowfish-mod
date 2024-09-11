@@ -28,27 +28,29 @@
 {{/* 正常业务逻辑 */}}
 {{- $targetCard := .Get 0 -}}
 {{/*- debug.Dump $gameDatabase -*/}}
-{{- $queryResult := where $gameDatabase "name" "eq" $targetCard -}}
+{{- $queryResult := where $gameDatabase "Name" "eq" $targetCard -}}
 {{- if eq (len $queryResult) 1 -}}
 	{{- $cardData := index $queryResult 0 -}}
 
-	{{- $cardCost := index $cardData "cost" | string -}}
+	{{- $cardCost := index $cardData "Cost" | string -}}
 	{{- if eq $cardCost "-10" -}}
 		{{- $cardCost = "X" -}}
 	{{- else if eq $cardCost "-11" -}}
 		{{- $cardCost = "无" -}}
-	{{- else if ne (index $cardData "cost") (index $cardData "upgraded_cost") -}}
-		{{- $cardCost = add (index $cardData "upgraded_cost" | string) ")+" | add "(" | add $cardCost -}}
+	{{- else if ne (index $cardData "Cost") (index $cardData "CostUpgraded") -}}
+		{{- $cardCost = add (index $cardData "CostUpgraded" | string) ")+" | add "(" | add $cardCost -}}
 	{{- end -}}
 
 	{{- $typeTextMap := dict "attack" "攻击" "skill" "技能" "power" "能力" "status" "状态" "curse" "诅咒" -}}
-	{{- $cardType := index $typeTextMap (lower (index $cardData `type`)) | default "未知类型" -}}
+	{{- $cardType := index $typeTextMap (lower (index $cardData `Type`)) | default "未知类型" -}}
 
 	{{- $rarityColorMap := dict "common" "#9e9e9e" "uncommon" "#7cdde3" "rare" "#ffbf47" -}}
-	{{- $cardColor := index $rarityColorMap (lower (index $cardData `rarity`)) | default "#cbd5e1" -}}
+	{{- $cardColor := index $rarityColorMap (lower (index $cardData `Rarity`)) | default "#cbd5e1" -}}
 
-	<u title="{{- $cardCost }} 费{{- $cardType -}}牌：{{- index $cardData `effect` -}}"
-		style="color:{{- $cardColor -}};"><i>{{- index $cardData `name` -}}</i></u>
+	<u title="{{- $cardCost }} 费 {{ $cardType -}}&#10;{{ index $cardData `Effect` -}}"
+		style="color:{{- $cardColor -}};"><i>{{- index $cardData `Name` -}}</i></u>
+{{- else if gt (len $queryResult) 1 -}}
+	<mark title="{{- debug.Dump $queryResult -}}">查询《杀戮尖塔》卡牌「{{- $targetCard -}}」数据时获取结果冲突</mark>
 {{- else -}}
-	<mark>查询《杀戮尖塔》卡牌「{{- $targetCard -}}」数据时发生错误</mark>
+	<mark>未查询到《杀戮尖塔》卡牌「{{- $targetCard -}}」数据</mark>
 {{- end -}}
