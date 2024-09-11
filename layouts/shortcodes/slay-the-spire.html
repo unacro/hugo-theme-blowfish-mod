@@ -3,23 +3,25 @@
 
 {{/* 尝试查询云端数据库并优先应用 */}}
 {{- with getenv "HUGO_NOCODB_TOKEN" -}}
-	{{- $baseUrl := "https://app.nocodb.com/" -}}
-	{{- $tableId := "mcaapqi9bm7v2sg" -}}
-	{{- $url := add $tableId "/records" | add "/api/v2/tables/" | add (strings.TrimRight "/" $baseUrl) -}}
-	{{- $opts := dict "headers" (dict "xc-token" .) -}}
-	{{- with resources.GetRemote $url $opts -}}
-		{{- with .Err -}}
-			{{- warnf "%s" . -}}
-		{{- else -}}
-			{{- if and (eq .Data.StatusCode 200) (strings.Contains (lower .Data.ContentType) "application/json") -}}
-				{{- $responseData := . | transform.Unmarshal -}}
-				{{- $gameDatabase = index $responseData "list" -}}
-			{{- else -}}
+	{{- $nocodbUrl := index $.Site.Params "nocodbUrl" -}}
+	{{- if $nocodbUrl -}}
+		{{- $tableId := "mcaapqi9bm7v2sg" -}}
+		{{- $url := add $tableId "/records" | add "/api/v2/tables/" | add (strings.TrimRight "/" $nocodbUrl) -}}
+		{{- $opts := dict "headers" (dict "xc-token" .) -}}
+		{{- with resources.GetRemote $url $opts -}}
+			{{- with .Err -}}
 				{{- warnf "%s" . -}}
+			{{- else -}}
+				{{- if and (eq .Data.StatusCode 200) (strings.Contains (lower .Data.ContentType) "application/json") -}}
+					{{- $responseData := . | transform.Unmarshal -}}
+					{{- $gameDatabase = index $responseData "list" -}}
+				{{- else -}}
+					{{- warnf "%s" . -}}
+				{{- end -}}
 			{{- end -}}
+		{{- else -}}
+			{{- errorf "Unable to get remote resource %q" $url -}}
 		{{- end -}}
-	{{- else -}}
-		{{- errorf "Unable to get remote resource %q" $url -}}
 	{{- end -}}
 {{- end -}}
 
@@ -33,6 +35,8 @@
 	{{- $cardCost := index $cardData "cost" | string -}}
 	{{- if eq $cardCost "-10" -}}
 		{{- $cardCost = "X" -}}
+	{{- else if eq $cardCost "-11" -}}
+		{{- $cardCost = "无" -}}
 	{{- else if ne (index $cardData "cost") (index $cardData "upgraded_cost") -}}
 		{{- $cardCost = add (index $cardData "upgraded_cost" | string) ")+" | add "(" | add $cardCost -}}
 	{{- end -}}
@@ -40,7 +44,7 @@
 	{{- $typeTextMap := dict "attack" "攻击" "skill" "技能" "power" "能力" "status" "状态" "curse" "诅咒" -}}
 	{{- $cardType := index $typeTextMap (lower (index $cardData `type`)) | default "未知类型" -}}
 
-	{{- $rarityColorMap := dict "common" "#c8c6c4" "uncommon" "#00bcf2" "rare" "#ffb900" -}}
+	{{- $rarityColorMap := dict "common" "#9e9e9e" "uncommon" "#7cdde3" "rare" "#ffbf47" -}}
 	{{- $cardColor := index $rarityColorMap (lower (index $cardData `rarity`)) | default "#cbd5e1" -}}
 
 	<u title="{{- $cardCost }} 费{{- $cardType -}}牌：{{- index $cardData `effect` -}}"
