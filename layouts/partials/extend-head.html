@@ -4,8 +4,26 @@
 {{ $enableScreenVersion := false }}
 {{ if $useAliyunMirror }}
 	<link rel="stylesheet" href="https://registry.npmmirror.com/@callmebill/lxgw-wenkai-web/latest/files/style.css" />
-	{{ if $enableScreenVersion }}<link rel="stylesheet" href="https://registry.npmmirror.com/lxgw-wenkai-screen-web/latest/files/style.css" />{{ end }}
+	{{ if $enableScreenVersion }}
+		<link rel="stylesheet" href="https://registry.npmmirror.com/lxgw-wenkai-screen-web/latest/files/style.css" />
+	{{ end }}
 {{ else }}
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css" />
-	{{ if $enableScreenVersion }}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-web@latest/style.css" />{{ end }}
+	{{ if $enableScreenVersion }}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-web@latest/style.css" />
+	{{ end }}
 {{ end }}
+<!--script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js"></script>
+<script>
+	const text = pangu.spacing("當你凝視著bug，bug也凝視著你");
+	// text = '當你凝視著 bug，bug 也凝視著你'
+
+	pangu.spacingElementById('main');
+	pangu.spacingElementByClassName('comment');
+	pangu.spacingElementByTagName('p');
+
+	document.addEventListener('DOMContentLoaded', () => {
+		// listen to any DOM change and automatically perform spacing via MutationObserver()
+		pangu.autoSpacingPage();
+	});
+</script-->

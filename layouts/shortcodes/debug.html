@@ -1,0 +1,42 @@
+
+
+<h3>正则匹配 & 替换</h3>
+<p><code>{{- $.Site.BaseURL -}}</code> => <code>{{- $domain := index (index (findRESubmatch `^https?://([^/]+)` $.Site.BaseURL) 0) 1 -}}{{- $domain -}}</code></p>
+
+<h3>控制台输出警告</h3>
+{{- warnidf "debug" "The %q shortcode was unable to find %s. See %s" .Name "$file" .Position -}}
+<p>见终端命令行</p>
+
+<h3>读取环境变量</h3>
+<p>HUGO_MOCK_DATA = <code>{{ getenv "HUGO_MOCK_DATA" -}}</code></p>
+
+<h3>持久化存储</h3>
+<p>
+todo: <a href="https://gohugo.io/methods/page/store/" target="_blank" rel="noopener noreferrer">Store</a> / <a href="https://gohugo.io/methods/page/scratch/" target="_blank" rel="noopener noreferrer">Scratch</a>
+
+{{/* .Store.Set "key" "value" }}
+{{ .Store.Get "key" */}}
+</p>
+
+<h3>获取资源</h3>
+<p>
+todo: <a href="https://gohugo.io/content-management/data-sources/" target="_blank" rel="noopener noreferrer">从 assets 目录获取资源并渲染</a>
+</p>
+
+<h3>数据检查</h3>
+
+<a href="https://gohugo.io/troubleshooting/inspection/" target="_blank" rel="noopener noreferrer">Data inspection</a>
+
+<h4>dump 数据</h4>
+
+<!--pre>{{ debug.Dump .Page.Params }}</pre-->
+{{- $jsonData := .Page.Params -}}
+{{- $code := $jsonData | jsonify (dict "prefix" "" "indent" "\t") -}}
+{{- $codeBlock := printf "```%s\n%s\n```" "json" $code -}}
+{{- $codeBlock | markdownify -}}
+
+<h4>打印变量</h4>
+<p>
+{{ $value := 42 }}
+{{ printf "%[1]v (%[1]T)" $value }} → <code>42 (int)</code>
+</p>

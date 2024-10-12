@@ -30,19 +30,43 @@ article {
     font-weight: normal;
   }
 
+  & mark {
+    & a {
+      color: #ce7b0d !important;
+    }
+  }
+
   & rt {
     font-size: .75rem;
   }
+
+  & dfn,
+  & abbr[title] {
+    margin-inline-end: 1px;
+    padding-block-end: 1px;
+    border-block-end: 1px dotted;
+    text-decoration: none;
+    cursor: help;
+  }
+
+  & dfn {
+    font-style: italic;
+  }
 }
 
-div.main-menu> :first-child {
-  /* 右上导航菜单, 默认样式有点挤 */
-  /* margin-top: .25rem; */
-}
+/* 右上导航菜单, 默认样式有点挤 */
+/* div.main-menu> :first-child {
+  margin-top: .25rem;
+} */
 
 .katex-display {
   overflow: visible;
   /* 默认样式为 hidden, 生怕你看全了公式是吧, 神金 */
+}
+
+.mermaid {
+  /* todo: 修改字体 */
+  font-family: inherit;
 }
 
 .spoiler {
@@ -54,4 +78,10 @@ div.main-menu> :first-child {
     /* color: rgba(255, 255, 255, 1); */
     filter: unset;
   }
+}
+
+.ygo-card {
+  padding: .2rem;
+  border: #ce7b0d solid .125rem;
+  border-radius: .3rem;
 }

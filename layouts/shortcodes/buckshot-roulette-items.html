@@ -2,9 +2,10 @@
 {{- $queryResult := where (index $gameDatabase "items") "mode" "ne" "multiplayer" -}}
 {{/*- debug.Dump $queryResult -*/}}
 {{- if gt (len $queryResult) 0 -}}
-	<ul>
+	<dl>
 		{{- range $queryResult -}}
-			<li>{{- .name -}}：{{- .effect -}}</li>
+			<dt>{{- .name -}}</dt>
+			<dd>{{- .effect -}}</dd>
 		{{- end -}}
-	</ul>
+	</dl>
 {{- end -}}
